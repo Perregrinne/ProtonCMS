@@ -1,6 +1,6 @@
 <?php
 //admin.php contains the HTML layout, login.php has the login logic.
-@include_once ($_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/login.php');
+@include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/login.php';
 ?>
 <!DOCTYPE html>
 <html>

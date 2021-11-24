@@ -2,10 +2,12 @@
 //Only logged-in admins may see this page!
 session_start();
 
-if(!isset($_SESSION['USERNAME']) || (time() - $_SESSION['TIME']) / 3600 < 1) {
-    header('Location: /admin.php');
-}
+@include_once $_SERVER['DOCUMENT_ROOT'] . "/proton/proton-core/dashboard.php";
 
+if(!isset($_SESSION['USERNAME']) || (time() - $_SESSION['TIME']) / 3600 < 1)
+    header('Location: /admin.php');
+else
+    $_SESSION['TIME'] = time();
 ?>
 <!Doctype html>
 <head>

@@ -1,22 +1,26 @@
 
 <?php 
-@include_once ($_SERVER["DOCUMENT_ROOT"] . "/proton/proton-core/setup.php");
-@include_once ($_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/database.php');
+@include_once $_SERVER["DOCUMENT_ROOT"] . "/proton/proton-core/setup.php";
+@include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/database/database.php';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Proton CMS - Setup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 </head>
 <body>
 Welcome to the first-time setup!<br>
 <br><?php echo $setup_errors; ?><br>
-<form action="" method="post" role="form">
-    First thing's first, let's setup the database:<br>
+<form action="/proton/setup.php" method="post" role="form">
+    First thing's first, would you like a database?<br>
     <label for="db-setup">Set up a database:</label><br>
     <select name="db-setup" id="db-setup" onchange="dbVisibility()">
-        <option id="db-setup-auto" value="automatic" selected>Set it up for me.</option><!-- Automatically set db settings and generate one. -->
-        <option id="db-setup-manual" value="manual">I will set it up.</option><!-- User sets the username, password, port, database name. -->
+        <option id="db-setup-skip" value="skip" selected>I don't want a database.</option><!-- Skip database setup, which can be done later. Useful for static website creation. -->
+        <option id="db-setup-auto" value="automatic">Create one for me.</option><!-- Automatically set db settings and generate one. -->
+        <option id="db-setup-manual" value="manual">I will create it.</option><!-- User sets the username, password, port, database name. -->
+        <option id="db-setup-connect" value="connect">Connect to my existing database.</option><!-- The user provides the login credentials for an existing database. -->
     </select><br>
     <!-- ON THE CLIENT SIDE, YOU CAN SWITCH VISIBILITY BETWEEN driver FORM AND connect FORM, BUT CHECK YOU HAVE CORRECT INFO ON THE SERVER SIDE! -->
     <!-- This means that database creation stuff can't be sent with connection to existing database info -->
@@ -28,12 +32,10 @@ Welcome to the first-time setup!<br>
             <option value="mysql">MySQL</option>
             <!-- TODO: In documentation: CockroachDB is compatible with the Postgres driver. -->
             <option value="pgsql">PostgreSQL</option>
-            <!--option value="dblib">SQL Server</option--><!-- TODO: MS SQL Server support planned for another day -->
-            <!-- TODO: Autodetect installation list. If multiple are installed, I am not sure what the default should be. -->
-            <option value="unsure" style="visibility: visible;" selected>I don't know</option>
+            <!--option value="dblib">SQL Server</option--><!-- TODO: MS SQL Server support is next -->
         </select><br>
         <input type="checkbox" id="has-db" name="has-db">
-        <label for="has-db">Use this information to connect to an already existing database:</label><br>
+        <label for="has-db">Use this information to connect to an existing database:</label><br>
         <input type="text" id="db-name" name="db-name" placeholder="Database Name"><br>
         <input type="text" id="db-username" name="username" placeholder="Username"><br>
         <label for="db-password">We keep track of the password, so please set it to something long, messy, and nonsensical.</label><br>
@@ -69,11 +71,11 @@ Welcome to the first-time setup!<br>
     let dbUploadSQL = document.getElementById("db-upload-sql");
 
     function dbVisibility() {
-        dbDiv.style.display = (setup.selectedIndex === 0) ? "none" : "inline";
+        dbDiv.style.display = (setup.selectedIndex === 0 || setup.selectedIndex === 1) ? "none" : "inline";
     }
 
-    /*TODO: Postgres default login is "postgres" and "admin". MySQL's is "root", no password.
-            Web hosts must generate the config file ahead of time for clients, that gets used
+    /*TODO: Postgres's default login is "postgres" and "admin". MySQL's is "root", no password.
+            Web hosts must generate the config file ahead of time for clients that gets used
             to create the project and its database.
     */
 </script>
