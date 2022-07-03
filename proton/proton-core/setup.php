@@ -29,9 +29,9 @@ session_start();
 if(@include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/config.php') {
     //If setup has already been run once, don't run through it a second time!
     //Redirect to the dashboard page instead:
-    if($P_INITSETUP['COMPLETE']) {
+    if(SETUP_COMPLETED) {
         //If they're logged in (ALWAYS CHECK!), redirect to the dashboard, otherwise to the login:
-        if(!isset($_SESSION['USERNAME']) && (time() - $_SESSION['TIME']) / 3600 < 1)
+        if(isset($_SESSION['USERNAME']) && (time() - $_SESSION['TIME']) / 3600 < 1)
             header('Location: /proton/dashboard.php');
         else
             header('Location: /admin.php');

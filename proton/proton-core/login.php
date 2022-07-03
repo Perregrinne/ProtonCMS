@@ -2,12 +2,12 @@
 session_start();
 
 //If the user is logged in, redirect to the dashboard:
-if(isset($_SESSION['USERNAME']))
+if(isset($_SESSION['USERNAME']) && (time() - $_SESSION['TIME']) / 3600 < 1)
     header('Location: /proton/dashboard.php');
 
 if(@include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/config.php') {
     //If first-time setup has never been run before, run through it.
-    if(!$P_INITSETUP['COMPLETE']) {
+    if(!SETUP_COMPLETED) {
         header('LOCATION: /proton/setup.php');
     }
     else { //If first-time setup has been completed, login normally:
@@ -15,8 +15,8 @@ if(@include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/config.php') {
 
         $login_msg = '';
         if(isset($_POST['login']) && !empty($_POST['username']) && !empty($_POST['password'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
+            $username = filter_input(INPUT_POST, $_POST['username'], FILTER_SANITIZE_STRING);
+            $password = filter_input(INPUT_POST, $_POST['password'], FILTER_SANITIZE_STRING);
             
             //Hit up the database for some creds, homie:
             $query = $connect->prepare("SELECT * FROM protonusers WHERE Username = :username");

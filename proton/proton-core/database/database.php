@@ -2,7 +2,7 @@
 @include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/config.php';
 @include_once $_SERVER['DOCUMENT_ROOT'] . '/proton/proton-core/logger.php';
 
-$connect = ""; //Connection global for accessing your database
+$connect = false; //Connection global for accessing your database
 
 //This script requires PHP 7.4 or newer because of the now consistent DSN (MySQL used to be the oddball)
 $username = ($is_pro) ? DB_PRO_USERNAME : DB_DEV_USERNAME;

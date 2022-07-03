@@ -11,7 +11,7 @@ else
 ?>
 <!Doctype html>
 <head>
-    <title>Web Mill CMS - Dashboard</title>
+    <title>Proton CMS - Dashboard</title>
 </head>
 <body>
 <div id="pt-container">
